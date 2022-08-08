@@ -14,7 +14,7 @@
   Lịch sử chat sẽ được lưu trong file `data.json` để lưu trữ và thực hiện các hành động liên quan. Rất cổ điển.
   
 #### API:
-  Sau khi chạy file `index.py`, truy cập vào địa chỉ mà file đấy nó chạy (VD: File `index.py` chạy và host ở  `http://127.0.0.1:5000` thì truy cập vào `http://127.0.0.1:5000`. <br>
+  Sau khi chạy file `index.py`, truy cập vào địa chỉ mà file đấy nó chạy (VD: File `index.py` chạy và host ở  `http://127.0.0.1:5000` thì truy cập vào `http://127.0.0.1:5000`. <br><br>
   Mọi hoạt động của API được chạy trên địa chỉ này
 
 #### Bên ngoài:
