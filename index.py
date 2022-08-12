@@ -71,9 +71,7 @@ def connect(ws: Server):
                     if ((len(username)>0) & (len(username)<=100)):
                         if (find(socks, 'name', username) == None): # Không có ai sử dụng tên này
                             try:
-                                socks[number]['name'] = username 
-
-                                print("[/] Đã thay đổi tên của ",oldname," (",ws ,") thành " ,username)
+                                socks[number]['name'] = username
 
                                 timestamp = datetime.datetime.now()
                                 out = {
@@ -84,6 +82,7 @@ def connect(ws: Server):
                                     'status': True
                                 }
                                 ws.send(json.dumps(out))
+                                print("[/] Đã thay đổi tên của ",oldname," (",ws ,") thành " ,username)
 
                                 #* Send to Other Client
                                 rec = {
@@ -94,11 +93,12 @@ def connect(ws: Server):
                                     "timestamp": timestamp.strftime("%d/%m/%Y, %H:%M:%S")
                                 }   
                                 for client in socks:
-                                    if (client['ws'] != ws):
-                                        client['ws'].send(json.dumps(rec))
+                                    if (client['socket'] != ws):
+                                        client['socket'].send(json.dumps(rec))
 
                             except Exception as e:
-                                print("[/] LỖI KHI ĐỔI TÊN ",oldname, "(", ws , ") thành tên " , username , " | Lý do: ",e)
+                                print("[/] LỖI KHI ĐỔI TÊN ",oldname, "(", ws , ") thành tên " , username , " | Lý do: ")
+                                print(e)
                                 out = {
                                     'type': 'change',
                                     'oldname': oldname,
@@ -159,7 +159,6 @@ def connect(ws: Server):
                                 "socket": ws
                             }
                             socks.append(reginfo)
-                            print("[+] Đã đăng ký " , ws , " dưới tên " , username)
 
                             timestamp = datetime.datetime.now()
                             out = {
@@ -169,6 +168,7 @@ def connect(ws: Server):
                                 'timestamp': timestamp.strftime("%d/%m/%Y, %H:%M:%S")
                             }
                             ws.send(json.dumps(out))
+                            print("[+] Đã đăng ký " , ws , " dưới tên " , username)
 
                             #* Send to Other Client 
                             rec = {
@@ -178,11 +178,12 @@ def connect(ws: Server):
                                 "timestamp": timestamp.strftime("%d/%m/%Y, %H:%M:%S")
                             }   
                             for client in socks:
-                                if (client['ws'] != ws):
-                                    client['ws'].send(json.dumps(rec))
+                                if (client['socket'] != ws):
+                                    client['socket'].send(json.dumps(rec))
 
                         except Exception as e:
-                            print("[+] LỖI KHI ĐĂNG KÝ " , ws , " dưới tên " , username , " | Lý do: ",e)
+                            print("[+] LỖI KHI ĐĂNG KÝ " , ws , " dưới tên " , username , " | Lý do: ")
+                            print(e)
                             out = {
                                 'type': 'register',
                                 'name': username,
@@ -253,7 +254,7 @@ def connect(ws: Server):
                         file = open('data.json', mode = 'w', encoding='utf_8')
                         file.write(json.dumps(msg))
                         file.close()
-                        print("[S] [",timestamp.strftime("%d/%m/%Y, %H:%M:%S"),"] Đã gửi tin: ",name, " (",ws,"): ", content)
+                        print("[S] Đã gửi tin: ",name, " (",ws,"): ", content)
 
                         #*Return client send
                         output = {
@@ -274,11 +275,12 @@ def connect(ws: Server):
                             "timestamp": timestamp.strftime("%d/%m/%Y, %H:%M:%S")
                         }   
                         for client in socks:
-                            if (client['ws'] != ws):
-                                client['ws'].send(json.dumps(rec))
+                            if (client['socket'] != ws):
+                                client['socket'].send(json.dumps(rec))
 
                     except Exception as e:
-                        print("[S] LỖI KHI GỬI TIN ",username," (",ws,"): " , content , " | Lý do: " , e)
+                        print("[S] LỖI KHI GỬI TIN ",username," (",ws,"): " , content , " | Lý do: ")
+                        print(e)
                         output = {
                             "type": "send",
                             "username": username,
@@ -314,7 +316,8 @@ def connect(ws: Server):
                             "data": dat
                         }
                     except Exception as e:
-                        print("[G] LỖI KHI CUNG CẤP TOÀN BỘ TIN NHẮN CHO ",username," (",ws,")" , " | Lý do: " , e)
+                        print("[G] LỖI KHI CUNG CẤP TOÀN BỘ TIN NHẮN CHO ",username," (",ws,")" , " | Lý do: ")
+                        print(e)
                         output = {
                             "type": "get",
                             "status": False,
