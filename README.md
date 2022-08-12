@@ -20,7 +20,7 @@ Kết nối và gửi tin nhắn:
       - `{"type":"send", "status": true, "timestamp":"Xâu_thời_gian"}` cho client đã gửi tin
       - `{"name":"Tên_Người_Gửi", "content":"Nội_dung", "timestamp":"Xâu_thời_gian}` cho các client khác
 
-      <b>CHÚ Ý: `"Tên_Người_Gửi"` từ 1 đến 100 ký tự, `"Nội_dung"` từ 1 đến 4000 ký tự</b>
+      <b>CHÚ Ý: `Tên_Người_Gửi` từ 1 đến 100 ký tự, `Nội_dung` từ 1 đến 4000 ký tự</b>
     - Thất bại:
       - `{"type":"send", "status": false}` cho client đã gửi tin
   - Lấy: `{"type":"get"}`
