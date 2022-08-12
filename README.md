@@ -22,3 +22,5 @@
   Lịch sử chat sẽ được lưu trong file <a href="https://github.com/thanhgaming5550/classic-chatbox-server/blob/main/data.json">`data.json`</a> để lưu trữ và thực hiện các hành động liên quan. Rất cổ điển.
 #### Thông tin khác:
 - **#study**: Đây là repo được tạo ra nhằm mục đích để hoàn thành Bài tập về nhà hoặc tựa tựa thế.
+
+Đây là dự án rất tâm huyết của mình :v Mong mọi người thích nó :3
