@@ -14,7 +14,7 @@
   Chạy file <a href="https://github.com/thanhgaming5550/classic-chatbox-server/blob/main/index.py">`index.py`</a> (`python index.py`)
 
 #### Đầu vào và đầu ra:
-Kết nối và gửi tin nhắn:
+Kết nối với `/` và gửi tin nhắn:
   - Gửi: `{"type":"send", "data":{"name":"Tên_Người_Gửi", "content":"Nội_dung"}}`
     - Thành công: 
       - `{"type":"send", "status": true, "timestamp":"Xâu_thời_gian"}` cho client đã gửi tin
