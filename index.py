@@ -209,7 +209,7 @@ def connect(ws: Server):
         number = find(socks, 'ws', ws)
         if (number != None):
             print("[<-] " + socks[number]['name'] + " (" + socks[number]['ws'] + ") đã rời khỏi Chatbox và ngắt kết nối")
-            socks.remove(find(socks, 'ws', ws))
+            socks.remove(number)
         else:
             print("[<-] " +ws+ "đã ngắt kết nối")
 
