@@ -92,7 +92,6 @@ def connect(ws: Server):
                     }
                     ws.send(out)
 
-
             if (data['type'] == "send"):
                 try:
                     name = data[find(socks, 'socket', ws)]['name']
@@ -208,9 +207,9 @@ def connect(ws: Server):
     except: 
         number = find(socks, 'ws', ws)
         if (number != None):
-            print("[<-] " + socks[number]['name'] + " (" + socks[number]['ws'] + ") đã rời khỏi Chatbox và ngắt kết nối")
+            print("[<-] Đã rời khỏi Chatbox và ngắt kết nối Socket" + socks[number]['name'] + " (" + socks[number]['ws'] + ")")
             socks.remove(socks[number])
         else:
-            print("[<-] " +ws+ "đã ngắt kết nối")
+            print("[<-] Đã ngắt kết nối Socket: " +ws)
 
 app.run()
