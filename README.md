@@ -17,7 +17,7 @@
 Kết nối và gửi tin nhắn:
   - Gửi: `{"type":"send", "data":{"name":"Tên_Người_Gửi", "content":"Nội_dung"}}`
     - Thành công: 
-      - `{"type":"send", "status": true, "timestamp":"Xâu_thời_gian"}`cho client đã gửi tin
+      - `{"type":"send", "status": true, "timestamp":"Xâu_thời_gian"}` cho client đã gửi tin
       - `{"name":"Tên_Người_Gửi", "content":"Nội_dung", "timestamp":"Xâu_thời_gian}` cho các client khác
 
       <b>CHÚ Ý: `"Tên_Người_Gửi"` từ 1 đến 100 ký tự, `"Nội_dung"` từ 1 đến 4000 ký tự</b>
@@ -25,7 +25,7 @@ Kết nối và gửi tin nhắn:
       - `{"type":"send", "status": false}` cho client đã gửi tin
   - Lấy: `{"type":"get"}`
     - Thành công: 
-      - `{"type":"get", "status": true, "data":[Tất cả tin nhắn]}`cho client đã gửi tin
+      - `{"type":"get", "status": true, "data":[Tất cả tin nhắn]}` cho client đã gửi tin
         - Đại diện 1 object trong `"data"`: 
           `{"name":"Tên_Người_Gửi", "content":"Nội_dung", "timestamp":"Xâu_thời_gian"}`
     - Thất bại: 
