@@ -5,7 +5,7 @@
 
 <!-- Click vào <a href="https://github.com/thanhgaming5550/classic-chatbox-client">đây</a> để chuyển sang Client</p> -->
 #### Có gì mới?
-Ở phiên bản v2, mình (thực ra là chờ teacher dạy WebSocket) đã sử dụng WebSocket để thay thế cho API ở v1, giúp cập nhật theo thời gian thực với lượng tài nguyên sử dụng rất ít. Cũng qua đó mình cũng thêm vào **"Hệ thống Chống lặp Biệt danh"** (**ARNS**: **Anti-Repeat Nickname System**) *(đặt tên cho nó sang)*, tức là mỗi kết nối chỉ được sử dụng 1 biệt danh duy nhất và không được lặp với biệt danh của người trước đó. 
+Ở phiên bản v2, mình (thực ra là chờ teacher dạy WebSocket) đã sử dụng WebSocket để thay thế cho API ở v1, giúp cập nhật theo thời gian thực với lượng tài nguyên sử dụng rất ít. Cũng qua đó mình cũng thêm vào **"Hệ thống Chống lặp Biệt danh"** (**ARNS**: **Anti-Repeat Nickname System**) *(đặt tên cho nó sang)*, tức là mỗi kết nối chỉ được sử dụng 1 biệt danh (có thể thay đổi) và không được lặp với biệt danh của người trước đó. 
 
 #### Yêu cầu:
 - <a href="https://pypi.org/project/Flask/">Flask</a>
