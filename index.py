@@ -20,7 +20,7 @@ def get():
     file.close()
     return output
 
-@sock.route('/connect')
+@sock.route('/')
 def connect(ws):
     socks.append(ws)
     try:
