@@ -4,6 +4,8 @@
 <p align="center">Đây là Server của <b>classic-chatbox</b>. Tạm thời chưa có Client thích hợp.
 
 <!-- Click vào <a href="https://github.com/thanhgaming5550/classic-chatbox-client">đây</a> để chuyển sang Client</p> -->
+#### Có gì mới?
+Ở phiên bản v2, mình (thực ra là chờ teacher dạy WebSocket) đã sử dụng WebSocket để thay thế cho API ở v1, giúp cập nhật theo thời gian thực với lượng tài nguyên sử dụng rất ít. Cũng qua đó mình cũng thêm vào **"Hệ thống Chống lặp Biệt danh"** (**ARNS**: **Anti-Repeat Nickname System**) *(đặt tên cho nó sang)*, tức là mỗi kết nối chỉ được sử dụng 1 biệt danh duy nhất và không được lặp với biệt danh của người trước đó. 
 
 #### Yêu cầu:
 - <a href="https://pypi.org/project/Flask/">Flask</a>
@@ -13,26 +15,8 @@
 #### Hướng dẫn sử dụng:
   Chạy file <a href="https://github.com/thanhgaming5550/classic-chatbox-server/blob/main/index.py">`index.py`</a> (`python index.py`)
 
-#### Đầu vào và đầu ra:
-Do Repo đang trong quá trình code nên tài liệu sẽ cập nhật sau.
-<!-- Kết nối với `/` và gửi tin nhắn:
-  - Gửi: `{"type":"send", "data":{"name":"Tên_Người_Gửi", "content":"Nội_dung"}}`
-    - Thành công: 
-      - `{"type":"send", "status": true, "timestamp":"Xâu_thời_gian"}` cho client đã gửi tin
-      - `{"name":"Tên_Người_Gửi", "content":"Nội_dung", "timestamp":"Xâu_thời_gian}` cho các client khác
-
-      <b>CHÚ Ý: `Tên_Người_Gửi` từ 1 đến 100 ký tự, `Nội_dung` từ 1 đến 4000 ký tự</b>
-    - Thất bại:
-      - `{"type":"send", "status": false}` cho client đã gửi tin
-  - Lấy: `{"type":"get"}`
-    - Thành công: 
-      - `{"type":"get", "status": true, "data":[Tất cả tin nhắn]}` cho client đã gửi tin
-        - Đại diện 1 object trong `"data"`: 
-          `{"name":"Tên_Người_Gửi", "content":"Nội_dung", "timestamp":"Xâu_thời_gian"}`
-    - Thất bại: 
-      `{"type":"get", "status": false}`cho client đã gửi tin
-
-Nếu gửi tin không đúng định dạng, tự động ngắt kết nối WebSocket. -->
+#### Tài liệu
+Đang trong quá trình code rất đau đầu và rối nơ-ron thần kinh nên sẽ cập nhật sau nha :3
 
 #### Lưu trữ:
   Lịch sử chat sẽ được lưu trong file <a href="https://github.com/thanhgaming5550/classic-chatbox-server/blob/main/data.json">`data.json`</a> để lưu trữ và thực hiện các hành động liên quan. Rất cổ điển.
