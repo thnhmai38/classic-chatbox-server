@@ -14,7 +14,8 @@
   Chạy file <a href="https://github.com/thanhgaming5550/classic-chatbox-server/blob/main/index.py">`index.py`</a> (`python index.py`)
 
 #### Đầu vào và đầu ra:
-Kết nối với `/` và gửi tin nhắn:
+Do Server đang trong quá trình code nên tài liệu sẽ cập nhật sau.
+<!-- Kết nối với `/` và gửi tin nhắn:
   - Gửi: `{"type":"send", "data":{"name":"Tên_Người_Gửi", "content":"Nội_dung"}}`
     - Thành công: 
       - `{"type":"send", "status": true, "timestamp":"Xâu_thời_gian"}` cho client đã gửi tin
@@ -31,7 +32,7 @@ Kết nối với `/` và gửi tin nhắn:
     - Thất bại: 
       `{"type":"get", "status": false}`cho client đã gửi tin
 
-Nếu gửi tin không đúng định dạng, tự động ngắt kết nối WebSocket.
+Nếu gửi tin không đúng định dạng, tự động ngắt kết nối WebSocket. -->
 
 #### Lưu trữ:
   Lịch sử chat sẽ được lưu trong file <a href="https://github.com/thanhgaming5550/classic-chatbox-server/blob/main/data.json">`data.json`</a> để lưu trữ và thực hiện các hành động liên quan. Rất cổ điển.
