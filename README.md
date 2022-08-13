@@ -1,6 +1,6 @@
 <h1 align="center">classic-chatbox-server</h1>
 
-<p align="center">Một chatbox đơn giản chỉ sử dụng API. Không dùng webhook hay websocket. <a href="https://github.com/thanhgaming5550/classic-chatbox-server/tree/websocket">Bản WebSocket</a>.</p>
+<p align="center">Một chatbox đơn giản chỉ sử dụng API. Không dùng webhook hay websocket. <a href="https://github.com/thanhgaming5550/classic-chatbox-server/tree/v2">Bản WebSocket</a>.</p>
 <p align="center">Đây là Server của <b>classic-chatbox</b>. Click vào <a href="https://github.com/thanhgaming5550/classic-chatbox-client">đây</a> để chuyển sang Client</p>
 
 #### Yêu cầu:
