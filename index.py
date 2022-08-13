@@ -36,6 +36,8 @@ print(datetime.datetime.now().strftime("%d/%m/%Y, %H:%M:%S"))
 print(" ")
 print("======== CHÚ GIẢI =======")
 print("[->] Kết nối tới")
+print("[>] Dữ liệu Client gửi")
+print("[=] Chung")
 print("[+] Đăng ký Biệt danh")
 print("[S] Tin nhắn gửi đi")
 print("[G] Fetch Tất cả tin nhắn")
@@ -47,24 +49,31 @@ print(" ")
 @sock.route('/')
 def connect(ws: Server):
     print("[->] Kết nối Socket mới: ", ws)
-    try:
-        while True:
+    while True:
+        isRightFormatJSON = False
+        receive = ""
+        try:
             receive = ws.receive()
+            print("[>]", ws, ":", receive)
+        except: 
+            break
+        
+        data = {}
+        try:
             data = json.loads(receive)
-            
+            isRightFormatJSON = True
+        except:
+            print("[=] Từ chối Thực thi yêu cầu ",ws," | Lý do: WrongFormatJSON")
+            out = {
+                'status': False,
+                'reason': "WrongFormatJSON"
+            }
+            ws.send(json.dumps(out))
+        if (isRightFormatJSON == True):
             if (data['type'] == "change"):
                 number = find(socks, 'socket', ws)
                 username = ""
-                try:
-                    username = data['name']
-                except:
-                    print("[/] Từ chối đổi tên ",ws," | Lý do: WrongFormatJSON")
-                    out = {
-                        'type': 'change',
-                        'status': False,
-                        'reason': "WrongFormatJSON"
-                    }
-                    return ws.send(json.dumps(out))
+                username = data['name']
                 if (number != None): # Xác nhận người này đã đăng ký
                     oldname = socks[number]['name']
                     if ((len(username)>0) & (len(username)<=100)):
@@ -137,17 +146,7 @@ def connect(ws: Server):
                     ws.send(json.dumps(out))
 
             if (data['type'] == "register"):
-                username = ""
-                try:
-                    username = data['name']
-                except:
-                    print("[+] Từ chối đăng ký " , ws , " | Lý do: WrongFormatJSON")
-                    out = {
-                        'type': 'register',
-                        'status': False,
-                        'reason': "WrongFormatJSON"
-                    }
-                    return ws.send(json.dumps(out))
+                username = data['name']
 
                 if ((len(username)>0) & (len(username)<=100)):
                     if (find(socks, 'name', username) == None):
@@ -221,18 +220,8 @@ def connect(ws: Server):
                     }
                     ws.send(json.dumps(output))
 
-                content = ""
-                try:
-                    content = data['content']
-                except:
-                    print("[S] Từ chối gửi tin ",name," (",ws,"): " , " | Lý do: WrongFormatJSON")
-                    output = {
-                        "type": "send",
-                        "username": name,
-                        "status": False,
-                        "reason":"WrongFormatJSON"
-                    }
-                    ws.send(json.dumps(output))
+
+                content = data['content']
 
                 if ((len(content)>0) & (len(content)<=4000)):
                     try:
@@ -297,7 +286,7 @@ def connect(ws: Server):
                             "reason":"WrongFormatContent"
                         }
                     ws.send(json.dumps(output))
-                    
+
             if (data['type'] == "get"):
                 number = find(socks, 'socket', ws)
                 if (number != None):
@@ -338,12 +327,11 @@ def connect(ws: Server):
                         "reason": "UnknownRegister"
                     }
                     ws.send(json.dumps(output))
-    except: 
-        number = find(socks, 'socket', ws)
-        if (number != None):
-            print("[<-] Đã rời khỏi Chatbox và ngắt kết nối Socket" , socks[number]['name'] , " (" , socks[number]['socket'] , ")")
-            socks.remove(socks[number])
-        else:
-            print("[<-] Đã ngắt kết nối Socket: " ,ws)
+    number = find(socks, 'socket', ws)
+    if (number != None):
+        print("[<-] Đã rời khỏi Chatbox và ngắt kết nối Socket" , socks[number]['name'] , " (" , socks[number]['socket'] , ")")
+        socks.remove(socks[number])
+    else:
+        print("[<-] Đã ngắt kết nối Socket: " ,ws)
 
 app.run()
