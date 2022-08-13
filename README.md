@@ -1,6 +1,6 @@
 <h1 align="center">classic-chatbox-server</h1>
 
-<p align="center">Một chatbox đơn giản sử dụng WebSocket. Là một phiên bản nâng cấp của <a href="https://github.com/thanhgaming5550/classic-chatbox-server/tree/api"> Bản API </a> để cập nhật theo thời gian thực.</p>
+<p align="center">Một chatbox đơn giản sử dụng WebSocket. Là một phiên bản nâng cấp của <a href="https://github.com/thanhgaming5550/classic-chatbox-server/tree/v1"> Bản API </a> để cập nhật theo thời gian thực.</p>
 <p align="center">Đây là Server của <b>classic-chatbox</b>. Tạm thời chưa có Client thích hợp.
 
 <h2 align="center">CHÚ Ý: PHIÊN BẢN NÀY VẪN ĐANG TRONG QUÁ TRÌNH XÂY DỰNG/CODE!</h2>
@@ -21,13 +21,13 @@ Ngoài ra còn có:
 - <a href="https://www.python.org/">Python 3</a>
 
 #### Hướng dẫn sử dụng:
-  Chạy file <a href="https://github.com/thanhgaming5550/classic-chatbox-server/blob/main/index.py">`index.py`</a> (`python index.py`)
+  Chạy file <a href="https://github.com/thanhgaming5550/classic-chatbox-server/blob/v2/index.py">`index.py`</a> (`python index.py`)
 
 #### Tài liệu
 Đang trong quá trình code rất đau đầu và rối nơ-ron thần kinh nên sẽ cập nhật sau nha :3
 
 #### Lưu trữ:
-  Lịch sử chat sẽ được lưu trong file <a href="https://github.com/thanhgaming5550/classic-chatbox-server/blob/main/data.json">`data.json`</a> để lưu trữ và thực hiện các hành động liên quan. Rất cổ điển.
+  Lịch sử chat sẽ được lưu trong file <a href="https://github.com/thanhgaming5550/classic-chatbox-server/blob/v2/data.json">`data.json`</a> để lưu trữ và thực hiện các hành động liên quan. Rất cổ điển.
 #### Thông tin khác:
 - **#study**: Đây là repo được tạo ra nhằm mục đích để hoàn thành Bài tập về nhà hoặc tựa tựa thế.
 
