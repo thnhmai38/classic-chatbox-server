@@ -9,6 +9,7 @@
 
 Ngoài ra còn có:
 - "**get**" ngoài cung cấp tin nhắn ra thì nó sẽ cung cấp cho Client Biệt danh những người đã kết nối tới Server.
+- Để sử dụng các tính năng trên Server (trừ "**register**"), bạn sẽ phải Đăng ký cho mình một cái Biệt danh trước ("**register**"), hoặc là Server chỉ đưa cho bạn đúng mỗi cái nịt `status: false` cho bạn muốn làm gì thì làm.
 
 #### Yêu cầu:
 - <a href="https://pypi.org/project/Flask/">Flask</a>
