@@ -29,8 +29,9 @@ def find(list: list, name: str , thing):
             return dem
     return None
 # Hàm này sẽ tìm thing trong [list].name, trả về None nếu không tìm thấy
-os.system('clear')
-os.system('cls')
+
+os.system('clear') # For Linux / OS X
+os.system('cls') # For Windows
 print(datetime.datetime.now().strftime("%d/%m/%Y, %H:%M:%S"))
 print(" ")
 print("======== CHÚ GIẢI =======")
