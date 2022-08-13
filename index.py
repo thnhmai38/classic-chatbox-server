@@ -102,7 +102,10 @@ def connect(ws: Server):
                                 }   
                                 for client in socks:
                                     if (client['socket'] != ws):
-                                        client['socket'].send(json.dumps(rec))
+                                        try: 
+                                            client['socket'].send(json.dumps(rec)) 
+                                        except Exception as e: 
+                                            print("[=] Không gửi được thông tin change của ", username, " cho ", client['socket']," | Lý do: ", repr(e))
 
                             except Exception as e:
                                 print("[/] LỖI KHI ĐỔI TÊN ",oldname, "(", ws , ") thành tên " , username , " | Lý do: ", repr(e))
@@ -187,7 +190,10 @@ def connect(ws: Server):
                             }   
                             for client in socks:
                                 if (client['socket'] != ws):
-                                    client['socket'].send(json.dumps(rec))
+                                    try: 
+                                        client['socket'].send(json.dumps(rec)) 
+                                    except Exception as e: 
+                                        print("[=] Không gửi được thông tin register của ", username, " cho ", client['socket']," | Lý do: ", repr(e))
 
                         except Exception as e:
                             print("[+] LỖI KHI ĐĂNG KÝ " , ws , " dưới tên " , username , " | Lý do: ", repr(e))
@@ -274,7 +280,10 @@ def connect(ws: Server):
                         }   
                         for client in socks:
                             if (client['socket'] != ws):
-                                client['socket'].send(json.dumps(rec))
+                                try: 
+                                    client['socket'].send(json.dumps(rec)) 
+                                except Exception as e: 
+                                    print("[=] Không gửi được thông tin message của ", username, " cho ", client['socket']," | Lý do: ", repr(e))
 
                     except Exception as e:
                         print("[S] LỖI KHI GỬI TIN ",name," (",ws,"): " , content , " | Lý do: ", repr(e))
