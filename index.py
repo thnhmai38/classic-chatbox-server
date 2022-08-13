@@ -52,22 +52,20 @@ def connect(ws: Server):
             data = json.loads(receive)
             
             if (data['type'] == "change"):
-                number = find(socks, 'ws', ws)
+                number = find(socks, 'socket', ws)
+                username = ""
+                try:
+                    username = data['name']
+                except:
+                    print("[/] Từ chối đổi tên ",ws," | Lý do: WrongFormatJSON")
+                    out = {
+                        'type': 'change',
+                        'status': False,
+                        'reason': "WrongFormatJSON"
+                    }
+                    return ws.send(json.dumps(out))
                 if (number != None): # Xác nhận người này đã đăng ký
                     oldname = socks[number]['name']
-                    username = ""
-                    try:
-                        username = data['name']
-                    except:
-                        print("[+] Từ chối đăng ký ",ws," dưới tên " ,username ," | Lý do: WrongFormatJSON")
-                        out = {
-                            'type': 'register',
-                            'name': username,
-                            'status': False,
-                            'reason': "WrongFormatJSON"
-                        }
-                        return ws.send(json.dumps(out))
-                    
                     if ((len(username)>0) & (len(username)<=100)):
                         if (find(socks, 'name', username) == None): # Không có ai sử dụng tên này
                             try:
@@ -142,10 +140,9 @@ def connect(ws: Server):
                 try:
                     username = data['name']
                 except:
-                    print("[+] Từ chối đăng ký " , ws , " dưới tên " , username , " | Lý do: WrongFormatJSON")
+                    print("[+] Từ chối đăng ký " , ws , " | Lý do: WrongFormatJSON")
                     out = {
                         'type': 'register',
-                        'name': username,
                         'status': False,
                         'reason': "WrongFormatJSON"
                     }
@@ -227,10 +224,10 @@ def connect(ws: Server):
                 try:
                     content = data['content']
                 except:
-                    print("[S] Từ chối gửi tin ",username," (",ws,"): " , " | Lý do: WrongFormatJSON")
+                    print("[S] Từ chối gửi tin ",name," (",ws,"): " , " | Lý do: WrongFormatJSON")
                     output = {
                         "type": "send",
-                        "username": username,
+                        "username": name,
                         "status": False,
                         "reason":"WrongFormatJSON"
                     }
@@ -279,21 +276,21 @@ def connect(ws: Server):
                                 client['socket'].send(json.dumps(rec))
 
                     except Exception as e:
-                        print("[S] LỖI KHI GỬI TIN ",username," (",ws,"): " , content , " | Lý do: ")
+                        print("[S] LỖI KHI GỬI TIN ",name," (",ws,"): " , content , " | Lý do: ")
                         print(e)
                         output = {
                             "type": "send",
-                            "username": username,
+                            "username": name,
                             "content": content,
                             "status": False,
                             "reason": "ErrorWhenSend"
                         }
                         ws.send(json.dumps(output))
                 else:
-                    print("[S] Từ chối gửi tin ",username," (",ws,"): " , content , " | Lý do: WrongFormatContent")
+                    print("[S] Từ chối gửi tin ",name," (",ws,"): " , content , " | Lý do: WrongFormatContent")
                     output = {
                             "type": "send",
-                            "username": username,
+                            "username": name,
                             "content": content,
                             "status": False,
                             "reason":"WrongFormatContent"
@@ -301,31 +298,39 @@ def connect(ws: Server):
                     ws.send(json.dumps(output))
                     
             if (data['type'] == "get"):
-                number = find(socks, 'ws', ws)
+                number = find(socks, 'socket', ws)
                 if (number != None):
+                    username = socks[number]['name']
                     output = {}
+                    online = []
                     try:
-                        print("[G] Cung cấp toàn bộ tin nhắn cho ",username," (",ws,")")
+                        for client in socks:
+                            online.append(client['name'])
                         timestamp = datetime.datetime.now()
                         dat = json.loads(get())
                         output = {
                             "type": "get",
                             "status": True,
-                            "name": socks[number]['name'],
-                            'timestaml': timestamp.strftime("%d/%m/%Y, %H:%M:%S"),
-                            "data": dat
+                            "name": username,
+                            'timestamp': timestamp.strftime("%d/%m/%Y, %H:%M:%S"),
+                            'data': {
+                                "message": dat,
+                                "online": online
+                            }
                         }
+                        print("[G] Đã cung cấp toàn bộ tin nhắn, người online cho ",username," (",ws,")")
                     except Exception as e:
-                        print("[G] LỖI KHI CUNG CẤP TOÀN BỘ TIN NHẮN CHO ",username," (",ws,")" , " | Lý do: ")
+                        print("[G] LỖI KHI CUNG CẤP TOÀN BỘ TIN NHẮN, NGƯỜI ONLINE CHO ",username," (",ws,")" , " | Lý do: ")
                         print(e)
                         output = {
                             "type": "get",
+                            "name": username,
                             "status": False,
                             "reason": "ErrorWhenGet"
                         }
                     ws.send(json.dumps(output))
                 else:
-                    print("[G] Từ chối cung cấp toàn bộ tin nhắn cho ",ws," | Lý do: UnknownRegister")
+                    print("[G] Từ chối cung cấp toàn bộ tin nhắn, người online cho ",ws," | Lý do: UnknownRegister")
                     output = {
                         "type": "get",
                         "status": False,
@@ -333,9 +338,9 @@ def connect(ws: Server):
                     }
                     ws.send(json.dumps(output))
     except: 
-        number = find(socks, 'ws', ws)
+        number = find(socks, 'socket', ws)
         if (number != None):
-            print("[<-] Đã rời khỏi Chatbox và ngắt kết nối Socket" , socks[number]['name'] , " (" , socks[number]['ws'] , ")")
+            print("[<-] Đã rời khỏi Chatbox và ngắt kết nối Socket" , socks[number]['name'] , " (" , socks[number]['socket'] , ")")
             socks.remove(socks[number])
         else:
             print("[<-] Đã ngắt kết nối Socket: " ,ws)
