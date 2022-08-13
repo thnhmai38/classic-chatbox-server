@@ -4,7 +4,7 @@
 <p align="center">Đây là Server của <b>classic-chatbox</b>. Tạm thời chưa có Client thích hợp.
 
 <h2 align="center">CHÚ Ý: PHIÊN BẢN NÀY VẪN ĐANG TRONG QUÁ TRÌNH XÂY DỰNG/CODE!</h2>
-<p align="center">Mọi đóng góp của bạn xin được nhờ chức năng PR giải quyết. Cảm ơn bạn rất nhiều!</p>
+<p align="center">Mọi đóng góp của bạn xin được nhờ chức năng PR tới branch này giải quyết. Cảm ơn bạn rất nhiều!</p>
 
 <!-- Click vào <a href="https://github.com/thanhgaming5550/classic-chatbox-client">đây</a> để chuyển sang Client</p> -->
 #### Có gì mới?
