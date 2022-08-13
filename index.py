@@ -147,6 +147,17 @@ def connect(ws: Server):
 
             if (data['type'] == "register"):
                 username = data['name']
+                number = find(socks, 'socket', ws)
+                if (number != None):
+                    print("[+] Từ chối đăng ký ",socks[number]['name'], " (" , ws , ") dưới tên " , username , " | Lý do: AlreadyRegisted")
+                    out = {
+                        'type': 'register',
+                        'name': socks[number]['name'],
+                        'regname': username,
+                        'status': False,
+                        'reason': "AlreadyRegisted"
+                    }
+                    return ws.send(json.dumps(out))
 
                 if ((len(username)>0) & (len(username)<=100)):
                     if (find(socks, 'name', username) == None):
