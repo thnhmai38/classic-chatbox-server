@@ -95,14 +95,14 @@ def connect(ws: Server):
                                         client['socket'].send(json.dumps(rec))
 
                             except Exception as e:
-                                print("[/] LỖI KHI ĐỔI TÊN ",oldname, "(", ws , ") thành tên " , username , " | Lý do: ")
-                                print(e)
+                                print("[/] LỖI KHI ĐỔI TÊN ",oldname, "(", ws , ") thành tên " , username , " | Lý do: ", repr(e))
                                 out = {
                                     'type': 'change',
                                     'oldname': oldname,
                                     'newname': username,
                                     'status': False,
-                                    'reason': "ErrorWhenChange"
+                                    'reason': "ErrorWhenChange",
+                                    "error": repr(e)
                                 }
                                 ws.send(json.dumps(out))
                         else:
@@ -179,13 +179,13 @@ def connect(ws: Server):
                                     client['socket'].send(json.dumps(rec))
 
                         except Exception as e:
-                            print("[+] LỖI KHI ĐĂNG KÝ " , ws , " dưới tên " , username , " | Lý do: ")
-                            print(e)
+                            print("[+] LỖI KHI ĐĂNG KÝ " , ws , " dưới tên " , username , " | Lý do: ", repr(e))
                             out = {
                                 'type': 'register',
                                 'name': username,
                                 'status': False,
-                                'reason': "ErrorWhenRegister"
+                                'reason': "ErrorWhenRegister",
+                                "error": repr(e)
                             }
                             ws.send(json.dumps(out))
                     else:
@@ -276,14 +276,14 @@ def connect(ws: Server):
                                 client['socket'].send(json.dumps(rec))
 
                     except Exception as e:
-                        print("[S] LỖI KHI GỬI TIN ",name," (",ws,"): " , content , " | Lý do: ")
-                        print(e)
+                        print("[S] LỖI KHI GỬI TIN ",name," (",ws,"): " , content , " | Lý do: ", repr(e))
                         output = {
                             "type": "send",
                             "username": name,
                             "content": content,
                             "status": False,
-                            "reason": "ErrorWhenSend"
+                            "reason": "ErrorWhenSend",
+                            "error": repr(e)
                         }
                         ws.send(json.dumps(output))
                 else:
@@ -320,13 +320,13 @@ def connect(ws: Server):
                         }
                         print("[G] Đã cung cấp toàn bộ tin nhắn, người online cho ",username," (",ws,")")
                     except Exception as e:
-                        print("[G] LỖI KHI CUNG CẤP TOÀN BỘ TIN NHẮN, NGƯỜI ONLINE CHO ",username," (",ws,")" , " | Lý do: ")
-                        print(e)
+                        print("[G] LỖI KHI CUNG CẤP TOÀN BỘ TIN NHẮN, NGƯỜI ONLINE CHO ",username," (",ws,")" , " | Lý do: ", repr(e))
                         output = {
                             "type": "get",
                             "name": username,
                             "status": False,
-                            "reason": "ErrorWhenGet"
+                            "reason": "ErrorWhenGet",
+                            "error": repr(e)
                         }
                     ws.send(json.dumps(output))
                 else:
