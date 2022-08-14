@@ -54,7 +54,8 @@ def loop(ws: Server, sec):
             t = threading.Timer(sec, func_wrapper)
             t.start()
             return t
-    except: pass
+    except:
+        disconnected(ws)
 
 def get():
     file = open("data.json", encoding='utf_8')
