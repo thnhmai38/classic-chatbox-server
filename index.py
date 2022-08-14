@@ -3,11 +3,45 @@ from flask import Flask
 from flask_sock import Sock, Server
 import datetime
 import os
+import threading
+import platform
 
 app = Flask(__name__)
 sock = Sock(app)
 
 socks = []
+ping_delay = 5
+
+def disconnected(ws: Server):
+    number = find(socks, 'socket', ws)
+    if (number != None):
+        print("[<-] Đã rời khỏi Chatbox và ngắt kết nối Socket" , socks[number]['name'] , " (" , socks[number]['socket'] , ")")
+        socks.remove(socks[number])
+    else:
+        print("[<-] Đã ngắt kết nối Socket: " ,ws)
+    try: 
+        ws.close() 
+    except:
+        pass
+    
+def ping(ws: Server):
+    output = {
+        "type" : "ping",
+        "timeout" : ping_delay
+    }
+    try:
+        ws.send(json.dumps(output))
+        return True
+    except: 
+        disconnected(ws)
+        return False
+def loop(ws: Server, sec):
+    if (ping(ws) == True):
+        def func_wrapper():
+            loop(ws, sec)
+        t = threading.Timer(sec, func_wrapper)
+        t.start()
+        return t
 
 def get():
     file = open("data.json", encoding='utf_8')
@@ -20,7 +54,6 @@ def get():
     output = file.read().rstrip()
     file.close()
     return output
-
 def find(list: list, name: str , thing):
     dem = -1
     for x in list:
@@ -30,8 +63,9 @@ def find(list: list, name: str , thing):
     return None
 # Hàm này sẽ tìm thing trong [list].name, trả về None nếu không tìm thấy
 
-os.system('clear') # For Linux / OS X
-os.system('cls') # For Windows
+if (platform.system() == "Linux" or platform.system() == "Darwin"): os.system('clear')
+elif (platform.system() == "Windows"): os.system('cls')
+
 print(datetime.datetime.now().strftime("%d/%m/%Y, %H:%M:%S"))
 print(" ")
 print("======== CHÚ GIẢI =======")
@@ -49,15 +83,18 @@ print(" ")
 @sock.route('/')
 def connect(ws: Server):
     print("[->] Kết nối Socket mới: ", ws)
+    loop(ws, ping_delay)
+
     while True:
-        isRightFormatJSON = False
         receive = ""
         try:
             receive = ws.receive()
             print("[>]", ws, ":", receive)
         except: 
+            disconnected(ws)
             break
         
+        isRightFormatJSON = False
         data = {}
         try:
             data = json.loads(receive)
@@ -100,7 +137,7 @@ def connect(ws: Server):
                                     "oldname": oldname,
                                     "newname": username,
                                     "timestamp": timestamp.strftime("%d/%m/%Y, %H:%M:%S")
-                                }   
+                                }
                                 for client in socks:
                                     if (client['socket'] != ws):
                                         try: 
@@ -336,12 +373,5 @@ def connect(ws: Server):
                 }
                 ws.send(json.dumps(output))
     # Về elif: https://www.freecodecamp.org/news/python-switch-statement-switch-case-example/
-    
-    number = find(socks, 'socket', ws)
-    if (number != None):
-        print("[<-] Đã rời khỏi Chatbox và ngắt kết nối Socket" , socks[number]['name'] , " (" , socks[number]['socket'] , ")")
-        socks.remove(socks[number])
-    else:
-        print("[<-] Đã ngắt kết nối Socket: " ,ws)
 
 app.run()
