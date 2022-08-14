@@ -47,12 +47,14 @@ def ping(ws: Server):
         disconnected(ws)
         return False
 def loop(ws: Server, sec):
-    if (ping(ws) == True):
-        def func_wrapper():
-            loop(ws, sec)
-        t = threading.Timer(sec, func_wrapper)
-        t.start()
-        return t
+    try:
+        if (ping(ws) == True):
+            def func_wrapper():
+                loop(ws, sec)
+            t = threading.Timer(sec, func_wrapper)
+            t.start()
+            return t
+    except: pass
 
 def get():
     file = open("data.json", encoding='utf_8')
@@ -101,8 +103,7 @@ def connect(ws: Server):
         try:
             receive = ws.receive()
             print("[>]", ws, ":", receive)
-        except: 
-            disconnected(ws)
+        except:
             break
         
         isRightFormatJSON = False
