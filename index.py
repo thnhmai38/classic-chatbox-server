@@ -218,7 +218,7 @@ def connect(ws: Server):
                         "status": False,
                         "reason": "UnknownRegister"
                     }
-                    ws.send(json.dumps(output))
+                    return ws.send(json.dumps(output))
 
                 content = data['content']
 
