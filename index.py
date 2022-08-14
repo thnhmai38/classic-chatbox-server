@@ -15,15 +15,26 @@ ping_delay = 5
 def disconnected(ws: Server):
     number = find(socks, 'socket', ws)
     if (number != None):
-        print("[<-] Đã rời khỏi Chatbox và ngắt kết nối Socket" , socks[number]['name'] , " (" , socks[number]['socket'] , ")")
         socks.remove(socks[number])
+        print("[<-] Đã rời khỏi Chatbox và ngắt kết nối Socket" , socks[number]['name'] , " (" , socks[number]['socket'] , ")")
+        timestamp = datetime.datetime.now()
+        rec = {
+            "type": "receive",
+            "datatype": "leave",
+            "name": socks[number]['name'],
+            "timestamp": timestamp.strftime("%d/%m/%Y, %H:%M:%S")
+        }   
+        for client in socks:
+            try: 
+                client['socket'].send(json.dumps(rec)) 
+            except Exception as e: 
+                print("[=] Không gửi được thông tin rời khỏi Server của ", socks[number]['name'], " cho ", client['socket']," | Lý do: ", repr(e))
     else:
         print("[<-] Đã ngắt kết nối Socket: " ,ws)
     try: 
         ws.close() 
     except:
         pass
-    
 def ping(ws: Server):
     output = {
         "type" : "ping",
