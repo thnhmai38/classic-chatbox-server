@@ -208,19 +208,18 @@ def connect(ws: Server):
                         ws.send(json.dumps(out))
 
             elif (data['type'] == "send"):
+                content = data['content']
                 name = ""
                 try:
-                    name = data[find(socks, 'socket', ws)]['name']
+                    name = socks[find(socks, 'socket', ws)]['name']
                 except: 
-                    print("[S] Từ chối gửi tin ",ws,": " , " | Lý do: UnknownRegister")
+                    print("[S] Từ chối gửi tin ",ws,": ", content , " | Lý do: UnknownRegister")
                     output = {
                         "type": data['type'],
                         "status": False,
                         "reason": "UnknownRegister"
                     }
                     return ws.send(json.dumps(output))
-
-                content = data['content']
 
                 if ((len(content)>0) & (len(content)<=4000)):
                     try:
