@@ -79,7 +79,7 @@ Tóm gọn lại là thế này:
 
 **Quy chuẩn:**
   - *``Tên_Người_dùng``*, *`Tên_Người_dùng_mới`* có ít nhất 1 ký tự và nhiều nhất 100 ký tự
-  - *`Nội_dung`* có ít nhất 1 ký tự và nhiều nhất 100 ký tự
+  - *`Nội_dung`* có ít nhất 1 ký tự và nhiều nhất 4000 ký tự
   - *`Thời_gian`* là một **xâu** có dạng `{`*`Ngày`*`}/{`*`Tháng`*`}/{`*`Năm`*`} {`*`Giờ`*`}/{`*`Phút`*`}{`*`Giây`*`}`
 
 ### Lưu trữ:
