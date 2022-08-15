@@ -128,7 +128,16 @@ def connect(ws: Server):
         if (isRightFormatJSON == True):
 
             if (data['type'] == "name"):
-                username = data['name']
+                try:
+                    username = data['name']
+                except:
+                    return ws.send(json.dumps({
+                        'type' : data['type'],
+                        'status': False,
+                        "reason":"NotEnoughKey",
+                        "need":"name"
+                    }))
+                    
                 number = find(socks, 'socket', ws)
                 if (number != None): #* Thay đổi tên
                     oldname = socks[number]['name']
@@ -266,7 +275,15 @@ def connect(ws: Server):
                         ws.send(json.dumps(out))
 
             elif (data['type'] == "send"):
-                content = data['content']
+                try:
+                    content = data['content']
+                except:
+                    return ws.send(json.dumps({
+                        'type' : data['type'],
+                        'status': False,
+                        "reason":"NotEnoughKey",
+                        "need": "content"
+                    }))
                 name = ""
                 try:
                     name = socks[find(socks, 'socket', ws)]['name']

@@ -4,7 +4,7 @@
 <p align="center">Đây là Server của <b>classic-chatbox</b>. Click vào <a href="https://github.com/thanhgaming5550/classic-chatbox-client/tree/v2">đây</a> để chuyển sang bản Client.
 
 <!-- Click vào <a href="https://github.com/thanhgaming5550/classic-chatbox-client">đây</a> để chuyển sang Client</p> -->
-#### Có gì mới?
+### Có gì mới?
 Ở phiên bản v2, mình (thực ra là chờ teacher dạy WebSocket) đã sử dụng WebSocket để thay thế cho API ở v1, giúp cập nhật theo thời gian thực với lượng tài nguyên sử dụng rất ít. Cũng qua đó mình cũng thêm vào **"Hệ thống Chống lặp Biệt danh"** (**ARNS**: **Anti-Repeat Nickname System**) *(đặt tên cho nó sang)*, tức là mỗi kết nối chỉ được sử dụng 1 biệt danh (có thể thay đổi) và không được lặp với biệt danh hiện tại của người trước đó. 
 
 Ngoài ra còn có:
@@ -16,18 +16,18 @@ Ngoài ra còn có:
 
 và nhiều tính năng mới mà cơ bản mình lười nên không ghi, với lại không nhớ mình đã update những gì
 
-#### Yêu cầu:
+### Yêu cầu:
 - <a href="https://pypi.org/project/Flask/">Flask</a>
 - <a href="https://pypi.org/project/flask-sock/">Flask-Sock</a>
 - <a href="https://www.python.org/">Python 3</a>
 
-#### Hướng dẫn sử dụng:
+### Hướng dẫn sử dụng:
   Chạy file <a href="https://github.com/thanhgaming5550/classic-chatbox-server/blob/v2/index.py">`index.py`</a> (`python index.py`)
 
-#### Tài liệu
+### Tài liệu
 Tóm gọn lại là thế này:
 
-```Mỗi Client sau khi kết nối phải gửi lệnh (tin) đăng ký để đăng ký cho mình 1 biệt danh, có thể thay đổi nhưng phải khác với các biệt danh hiện tại của người khác, bằng không thì các chức năng chính (trừ chức năng đăng ký) sẽ không được thực thi. Biệt danh giống như tên của Client, dùng làm tên để đại diện trò chuyện với các Client khác.```
+**```Mỗi Client sau khi kết nối phải gửi lệnh (tin) đăng ký để đăng ký cho mình 1 biệt danh, có thể thay đổi nhưng phải khác với các biệt danh hiện tại của người khác, bằng không thì các chức năng chính (trừ chức năng đăng ký) sẽ không được thực thi. Biệt danh giống như tên của Client, dùng làm tên để đại diện trò chuyện với các Client khác.```**
 
 **Khi Client gửi cho Server 1 message:**
 - `{"data":"name", "name":"`<i>`Tên_người_dùng`</i>`"}`
@@ -70,17 +70,21 @@ Tóm gọn lại là thế này:
     - Server sẽ gửi cho các Client khác: `{"type":"receive", "datatype":"leave", "name":"`*`Tên_người_dùng`*`", "timestamp":"`*`Thời_gian`*`"}` và xóa biệt danh *`Tên_người_dùng`*  khỏi danh sách biệt danh đã đăng ký
   - Client gửi cho Server tin nhắn không thuộc dạng JSON:
     - Server sẽ gửi cho Client đó: `{"status":false, "reason":"WrongFormatJSON"}`
+  - Client gửi cho Server một trong 2 *`Loại_Yêu_cầu`* trên (*`name`* hoặc *`send`*) nhưng không có key *`Key_cần`* được yêu cầu
+    - Server sẽ gửi cho Client đó: `{"type":"`*`Loại_Yêu_cầu`*`", "status":false, "reason":"NotEnoughKey", "need":"`*`Key_cần`*`}`
+  - Client gửi cho Server tin nhắn không thuộc một trong 3 Loại yêu cầu trên (*`name`*, *`send`*, *`get`*):
+    - Server sẽ gửi cho Client đó: `{"type":null, "status":false, "reason":"UnknownType"}`
 
-**Server sẽ kiểm tra Client đã Ngắt kết nối chưa** mỗi 5s bằng cách cứ mối 5s sẽ gửi cho các Client tin nhắn `{"type":"ping", "timeout":"`*`Delay_mỗi_lần_ping`*`"}`. Phải kiểm tra như vậy vì #1. *`Delay_mỗi_lần_ping`* hiện tại là số 5.
+**Server sẽ kiểm tra Client đã Ngắt kết nối chưa** mỗi 5s bằng cách cứ mối 5s sẽ gửi cho các Client tin nhắn `{"type":"ping", "timeout":"`*`Delay_mỗi_lần_ping`*`"}`. Phải kiểm tra như vậy vì <a href="https://github.com/thanhgaming5550/classic-chatbox-server/issues/1">#1</a>. *`Delay_mỗi_lần_ping`* hiện tại là số 5.
 
 **Quy chuẩn:**
   - *``Tên_Người_dùng``*, *`Tên_Người_dùng_mới`* có ít nhất 1 ký tự và nhiều nhất 100 ký tự
   - *`Nội_dung`* có ít nhất 1 ký tự và nhiều nhất 100 ký tự
   - *`Thời_gian`* là một **xâu** có dạng `{`*`Ngày`*`}/{`*`Tháng`*`}/{`*`Năm`*`} {`*`Giờ`*`}/{`*`Phút`*`}{`*`Giây`*`}`
 
-#### Lưu trữ:
+### Lưu trữ:
   Lịch sử chat sẽ được lưu trong file <a href="https://github.com/thanhgaming5550/classic-chatbox-server/blob/v2/data.json">`data.json`</a> để lưu trữ và thực hiện các hành động liên quan. Rất cổ điển.
-#### Thông tin khác:
+### Thông tin khác:
 - **#study**: Đây là repo được tạo ra nhằm mục đích để hoàn thành Bài tập về nhà hoặc tựa tựa thế.
 
 Đây là dự án rất tâm huyết của mình :v Mong mọi người thích nó :3
