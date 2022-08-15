@@ -3,9 +3,6 @@
 <p align="center">Một chatbox đơn giản sử dụng WebSocket. Là một phiên bản nâng cấp của <a href="https://github.com/thanhgaming5550/classic-chatbox-server/tree/v1"> Bản API </a> để cập nhật theo thời gian thực.</p>
 <p align="center">Đây là Server của <b>classic-chatbox</b>. Click vào <a href="https://github.com/thanhgaming5550/classic-chatbox-client/tree/v2">đây</a> để chuyển sang bản Client.
 
-<h2 align="center">CHÚ Ý: PHIÊN BẢN NÀY VẪN ĐANG TRONG QUÁ TRÌNH XÂY DỰNG/CODE!</h2>
-<p align="center">Mọi đóng góp của bạn xin được nhờ chức năng PR tới branch này giải quyết. Cảm ơn bạn rất nhiều!</p>
-
 <!-- Click vào <a href="https://github.com/thanhgaming5550/classic-chatbox-client">đây</a> để chuyển sang Client</p> -->
 #### Có gì mới?
 Ở phiên bản v2, mình (thực ra là chờ teacher dạy WebSocket) đã sử dụng WebSocket để thay thế cho API ở v1, giúp cập nhật theo thời gian thực với lượng tài nguyên sử dụng rất ít. Cũng qua đó mình cũng thêm vào **"Hệ thống Chống lặp Biệt danh"** (**ARNS**: **Anti-Repeat Nickname System**) *(đặt tên cho nó sang)*, tức là mỗi kết nối chỉ được sử dụng 1 biệt danh (có thể thay đổi) và không được lặp với biệt danh hiện tại của người trước đó. 
