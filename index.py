@@ -131,6 +131,7 @@ def connect(ws: Server):
                 try:
                     username = data['name']
                 except:
+                    print("[=] Từ chối Thực thi yêu cầu Name cho ",ws," | Lý do: NotEnoughKey")
                     return ws.send(json.dumps({
                         'type' : data['type'],
                         'status': False,
@@ -278,6 +279,7 @@ def connect(ws: Server):
                 try:
                     content = data['content']
                 except:
+                    print("[S] Từ chối Thực thi yêu cầu Send cho ",ws," | Lý do: NotEnoughKey")
                     return ws.send(json.dumps({
                         'type' : data['type'],
                         'status': False,
@@ -410,6 +412,7 @@ def connect(ws: Server):
                     "reason": "UnknownType"
                 }
                 ws.send(json.dumps(output))
+                print("[=] Từ chối Thực thi yêu cầu ",ws," | Lý do: UnknownType")
     # Về elif: https://www.freecodecamp.org/news/python-switch-statement-switch-case-example/
 
 set_interval(ClientOfflineDetect, ping_delay)
