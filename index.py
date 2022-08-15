@@ -119,7 +119,7 @@ def connect(ws: Server):
             data = json.loads(receive)
             isRightFormatJSON = True
         except:
-            print("[=] Từ chối Thực thi yêu cầu ",ws," | Lý do: WrongFormatJSON")
+            print("[=] Từ chối Thực thi yêu cầu cho ",ws," | Lý do: WrongFormatJSON")
             out = {
                 'status': False,
                 'reason': "WrongFormatJSON"
@@ -412,7 +412,7 @@ def connect(ws: Server):
                     "reason": "UnknownType"
                 }
                 ws.send(json.dumps(output))
-                print("[=] Từ chối Thực thi yêu cầu ",ws," | Lý do: UnknownType")
+                print("[=] Từ chối Thực thi yêu cầu cho ",ws," | Lý do: UnknownType")
     # Về elif: https://www.freecodecamp.org/news/python-switch-statement-switch-case-example/
 
 set_interval(ClientOfflineDetect, ping_delay)
