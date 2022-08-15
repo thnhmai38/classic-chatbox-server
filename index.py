@@ -144,8 +144,8 @@ def connect(ws: Server):
                                     'action': 'change',
                                     'oldname': oldname,
                                     'newname': username,
-                                    'timestamp': timestamp.strftime("%d/%m/%Y, %H:%M:%S"),
-                                    'status': True
+                                    'status': True,
+                                    'timestamp': timestamp.strftime("%d/%m/%Y, %H:%M:%S")
                                 }
                                 ws.send(json.dumps(out))
                                 print("[/] Đã thay đổi tên của ",oldname," (",ws ,") thành " ,username)
