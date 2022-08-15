@@ -128,241 +128,246 @@ def connect(ws: Server):
         if (isRightFormatJSON == True):
 
             if (data['type'] == "name"):
+                EnoughKey = True
                 try:
                     username = data['name']
                 except:
                     print("[=] Từ chối Thực thi yêu cầu Name cho ",ws," | Lý do: NotEnoughKey")
-                    return ws.send(json.dumps({
+                    EnoughKey = False
+                    ws.send(json.dumps({
                         'type' : data['type'],
                         'status': False,
                         "reason":"NotEnoughKey",
                         "need":"name"
                     }))
-                    
-                number = find(socks, 'socket', ws)
-                if (number != None): #* Thay đổi tên
-                    oldname = socks[number]['name']
-                    if ((len(username)>0) & (len(username)<=100)):
-                        if (find(socks, 'name', username) == None): # Không có ai sử dụng tên này
-                            try:
-                                socks[number]['name'] = username
-                                allsocks[find(allsocks, 'socket', ws)] = socks[number]
-    
-                                timestamp = datetime.datetime.now()
-                                out = {
-                                    'type': data['type'],
-                                    'action': 'change',
-                                    'oldname': oldname,
-                                    'newname': username,
-                                    'status': True,
-                                    'timestamp': timestamp.strftime("%d/%m/%Y, %H:%M:%S")
-                                }
-                                ws.send(json.dumps(out))
-                                print("[/] Đã thay đổi tên của ",oldname," (",ws ,") thành " ,username)
-    
-                                #* Send to Other Client
-                                rec = {
-                                    "type": "receive",
-                                    "datatype": "change",
-                                    "oldname": oldname,
-                                    "newname": username,
-                                    "timestamp": timestamp.strftime("%d/%m/%Y, %H:%M:%S")
-                                }
-                                for client in socks:
-                                    if (client['socket'] != ws):
-                                        try: 
-                                            client['socket'].send(json.dumps(rec)) 
-                                        except Exception as e: 
-                                            print("[=] Không gửi được thông tin change của ", username, " cho ", client['socket']," | Lý do: ", repr(e))
-                            except Exception as e:
-                                print("[/] LỖI KHI ĐỔI TÊN ",oldname, "(", ws , ") thành tên " , username , " | Lý do: ", repr(e))
+                if (EnoughKey == True):
+                    number = find(socks, 'socket', ws)
+                    if (number != None): #* Thay đổi tên
+                        oldname = socks[number]['name']
+                        if ((len(username)>0) & (len(username)<=100)):
+                            if (find(socks, 'name', username) == None): # Không có ai sử dụng tên này
+                                try:
+                                    socks[number]['name'] = username
+                                    allsocks[find(allsocks, 'socket', ws)] = socks[number]
+        
+                                    timestamp = datetime.datetime.now()
+                                    out = {
+                                        'type': data['type'],
+                                        'action': 'change',
+                                        'oldname': oldname,
+                                        'newname': username,
+                                        'status': True,
+                                        'timestamp': timestamp.strftime("%d/%m/%Y, %H:%M:%S")
+                                    }
+                                    ws.send(json.dumps(out))
+                                    print("[/] Đã thay đổi tên của ",oldname," (",ws ,") thành " ,username)
+        
+                                    #* Send to Other Client
+                                    rec = {
+                                        "type": "receive",
+                                        "datatype": "change",
+                                        "oldname": oldname,
+                                        "newname": username,
+                                        "timestamp": timestamp.strftime("%d/%m/%Y, %H:%M:%S")
+                                    }
+                                    for client in socks:
+                                        if (client['socket'] != ws):
+                                            try: 
+                                                client['socket'].send(json.dumps(rec)) 
+                                            except Exception as e: 
+                                                print("[=] Không gửi được thông tin change của ", username, " cho ", client['socket']," | Lý do: ", repr(e))
+                                except Exception as e:
+                                    print("[/] LỖI KHI ĐỔI TÊN ",oldname, "(", ws , ") thành tên " , username , " | Lý do: ", repr(e))
+                                    out = {
+                                        'type': data['type'],
+                                        'action': 'change',
+                                        'oldname': oldname,
+                                        'newname': username,
+                                        'status': False,
+                                        'reason': "ErrorWhenChange",
+                                        "error": repr(e)
+                                    }
+                                    ws.send(json.dumps(out))
+                            else:
+                                print("[/] Từ chối đổi tên cho ",oldname, "(", ws , ") thành tên " , username , " | Lý do: NameAlreadyUsed")
                                 out = {
                                     'type': data['type'],
                                     'action': 'change',
                                     'oldname': oldname,
                                     'newname': username,
                                     'status': False,
-                                    'reason': "ErrorWhenChange",
-                                    "error": repr(e)
+                                    'reason': "NameAlreadyUsed"
                                 }
                                 ws.send(json.dumps(out))
-                        else:
-                            print("[/] Từ chối đổi tên cho ",oldname, "(", ws , ") thành tên " , username , " | Lý do: NameAlreadyUsed")
+                        else: 
+                            print("[/] Từ chối đổi tên cho ",oldname, "(", ws , ") thành tên " , username , " | Lý do: WrongFormatName")
                             out = {
                                 'type': data['type'],
-                                'action': 'change',
+                                'action':'change',
                                 'oldname': oldname,
                                 'newname': username,
                                 'status': False,
-                                'reason': "NameAlreadyUsed"
+                                'reason': "WrongFormatName"
                             }
                             ws.send(json.dumps(out))
-                    else: 
-                        print("[/] Từ chối đổi tên cho ",oldname, "(", ws , ") thành tên " , username , " | Lý do: WrongFormatName")
-                        out = {
-                            'type': data['type'],
-                            'action':'change',
-                            'oldname': oldname,
-                            'newname': username,
-                            'status': False,
-                            'reason': "WrongFormatName"
-                        }
-                        ws.send(json.dumps(out))
-                else: #*Đăng ký tên
-                    if ((len(username)>0) & (len(username)<=100)):
-                        if (find(socks, 'name', username) == None):
-                            try:
-                                reginfo = {
-                                    "name": username,
-                                    "socket": ws
-                                }
-                                socks.append(reginfo)
-                                allsocks[find(allsocks, 'socket', ws)] = reginfo
+                    else: #*Đăng ký tên
+                        if ((len(username)>0) & (len(username)<=100)):
+                            if (find(socks, 'name', username) == None):
+                                try:
+                                    reginfo = {
+                                        "name": username,
+                                        "socket": ws
+                                    }
+                                    socks.append(reginfo)
+                                    allsocks[find(allsocks, 'socket', ws)] = reginfo
 
-                                timestamp = datetime.datetime.now()
-                                out = {
-                                    'type': data['type'],
-                                    'action':'register',
-                                    'name': username,
-                                    'status': True,
-                                    'timestamp': timestamp.strftime("%d/%m/%Y, %H:%M:%S")
-                                }
-                                ws.send(json.dumps(out))
-                                print("[+] Đã đăng ký " , ws , " dưới tên " , username)
+                                    timestamp = datetime.datetime.now()
+                                    out = {
+                                        'type': data['type'],
+                                        'action':'register',
+                                        'name': username,
+                                        'status': True,
+                                        'timestamp': timestamp.strftime("%d/%m/%Y, %H:%M:%S")
+                                    }
+                                    ws.send(json.dumps(out))
+                                    print("[+] Đã đăng ký " , ws , " dưới tên " , username)
 
-                                #* Send to Other Client 
-                                rec = {
-                                    "type": "receive",
-                                    "datatype": "register",
-                                    "name": username,
-                                    "timestamp": timestamp.strftime("%d/%m/%Y, %H:%M:%S")
-                                }   
-                                for client in socks:
-                                    if (client['socket'] != ws):
-                                        try: 
-                                            client['socket'].send(json.dumps(rec)) 
-                                        except Exception as e: 
-                                            print("[=] Không gửi được thông tin register của ", username, " cho ", client['socket']," | Lý do: ", repr(e))
-                            except Exception as e:
-                                print("[+] LỖI KHI ĐĂNG KÝ " , ws , " dưới tên " , username , " | Lý do: ", repr(e))
+                                    #* Send to Other Client 
+                                    rec = {
+                                        "type": "receive",
+                                        "datatype": "register",
+                                        "name": username,
+                                        "timestamp": timestamp.strftime("%d/%m/%Y, %H:%M:%S")
+                                    }   
+                                    for client in socks:
+                                        if (client['socket'] != ws):
+                                            try: 
+                                                client['socket'].send(json.dumps(rec)) 
+                                            except Exception as e: 
+                                                print("[=] Không gửi được thông tin register của ", username, " cho ", client['socket']," | Lý do: ", repr(e))
+                                except Exception as e:
+                                    print("[+] LỖI KHI ĐĂNG KÝ " , ws , " dưới tên " , username , " | Lý do: ", repr(e))
+                                    out = {
+                                        'type': data['type'],
+                                        'action':'register',
+                                        'name': username,
+                                        'status': False,
+                                        'reason': "ErrorWhenRegister",
+                                        "error": repr(e)
+                                    }
+                                    ws.send(json.dumps(out))
+                            else:
+                                print("[+] Từ chối đăng ký " , ws , " dưới tên " , username , " | Lý do: NameAlreadyUsed")
                                 out = {
                                     'type': data['type'],
                                     'action':'register',
                                     'name': username,
                                     'status': False,
-                                    'reason': "ErrorWhenRegister",
-                                    "error": repr(e)
+                                    'reason': "NameAlreadyUsed"
                                 }
                                 ws.send(json.dumps(out))
-                        else:
-                            print("[+] Từ chối đăng ký " , ws , " dưới tên " , username , " | Lý do: NameAlreadyUsed")
+                        else: 
+                            print("[+] Từ chối đăng ký " , ws , " dưới tên " , username , " | Lý do: WrongFormatName")
                             out = {
                                 'type': data['type'],
-                                'action':'register',
+                                'action': 'register',
                                 'name': username,
                                 'status': False,
-                                'reason': "NameAlreadyUsed"
+                                'reason': "WrongFormatName"
                             }
                             ws.send(json.dumps(out))
-                    else: 
-                        print("[+] Từ chối đăng ký " , ws , " dưới tên " , username , " | Lý do: WrongFormatName")
-                        out = {
-                            'type': data['type'],
-                            'action': 'register',
-                            'name': username,
-                            'status': False,
-                            'reason': "WrongFormatName"
-                        }
-                        ws.send(json.dumps(out))
 
             elif (data['type'] == "send"):
+                EnoughKey = True
                 try:
                     content = data['content']
                 except:
                     print("[S] Từ chối Thực thi yêu cầu Send cho ",ws," | Lý do: NotEnoughKey")
+                    EnoughKey = False
                     return ws.send(json.dumps({
                         'type' : data['type'],
                         'status': False,
                         "reason":"NotEnoughKey",
                         "need": "content"
                     }))
-                name = ""
-                try:
-                    name = socks[find(socks, 'socket', ws)]['name']
-                except: 
-                    print("[S] Từ chối gửi tin ",ws,": ", content , " | Lý do: UnknownRegister")
-                    output = {
-                        "type": data['type'],
-                        "status": False,
-                        "reason": "UnknownRegister"
-                    }
-                    return ws.send(json.dumps(output))
-
-                if ((len(content)>0) & (len(content)<=4000)):
+                if (EnoughKey == True):
+                    name = ""
                     try:
-                        #*Read old data 
-                        msg = json.loads(get())
-
-                        #*Package data to Python list
-                        timestamp = datetime.datetime.now()
-                        input = {
-                            "name": name,
-                            "content": content,
-                            "timestamp": timestamp.strftime("%d/%m/%Y, %H:%M:%S")
-                        }   
-                        msg.append(input)
-
-                        #*Save chat
-                        file = open('data.json', mode = 'w', encoding='utf_8')
-                        file.write(json.dumps(msg))
-                        file.close()
-                        print("[S] Đã gửi tin: ",name, " (",ws,"): ", content)
-
-                        #*Return client send
+                        name = socks[find(socks, 'socket', ws)]['name']
+                    except: 
+                        print("[S] Từ chối gửi tin ",ws,": ", content , " | Lý do: UnknownRegister")
                         output = {
                             "type": data['type'],
-                            "name": name,
-                            "content": content,
-                            "status": True,
-                            "timestamp": timestamp.strftime("%d/%m/%Y, %H:%M:%S")
+                            "status": False,
+                            "reason": "UnknownRegister"
                         }
-                        ws.send(json.dumps(output))
+                        return ws.send(json.dumps(output))
 
-                        #*Update another Client
-                        rec = {
-                            "type": "receive",
-                            "datatype": "message",
-                            "name": name,
-                            "content": content,
-                            "timestamp": timestamp.strftime("%d/%m/%Y, %H:%M:%S")
-                        }   
-                        for client in socks:
-                            if (client['socket'] != ws):
-                                try: 
-                                    client['socket'].send(json.dumps(rec)) 
-                                except Exception as e: 
-                                    print("[=] Không gửi được thông tin message của ", username, " cho ", client['socket']," | Lý do: ", repr(e))
-                    except Exception as e:
-                        print("[S] LỖI KHI GỬI TIN ",name," (",ws,"): " , content , " | Lý do: ", repr(e))
+                    if ((len(content)>0) & (len(content)<=4000)):
+                        try:
+                            #*Read old data 
+                            msg = json.loads(get())
+
+                            #*Package data to Python list
+                            timestamp = datetime.datetime.now()
+                            input = {
+                                "name": name,
+                                "content": content,
+                                "timestamp": timestamp.strftime("%d/%m/%Y, %H:%M:%S")
+                            }   
+                            msg.append(input)
+
+                            #*Save chat
+                            file = open('data.json', mode = 'w', encoding='utf_8')
+                            file.write(json.dumps(msg))
+                            file.close()
+                            print("[S] Đã gửi tin: ",name, " (",ws,"): ", content)
+
+                            #*Return client send
+                            output = {
+                                "type": data['type'],
+                                "name": name,
+                                "content": content,
+                                "status": True,
+                                "timestamp": timestamp.strftime("%d/%m/%Y, %H:%M:%S")
+                            }
+                            ws.send(json.dumps(output))
+
+                            #*Update another Client
+                            rec = {
+                                "type": "receive",
+                                "datatype": "message",
+                                "name": name,
+                                "content": content,
+                                "timestamp": timestamp.strftime("%d/%m/%Y, %H:%M:%S")
+                            }   
+                            for client in socks:
+                                if (client['socket'] != ws):
+                                    try: 
+                                        client['socket'].send(json.dumps(rec)) 
+                                    except Exception as e: 
+                                        print("[=] Không gửi được thông tin message của ", username, " cho ", client['socket']," | Lý do: ", repr(e))
+                        except Exception as e:
+                            print("[S] LỖI KHI GỬI TIN ",name," (",ws,"): " , content , " | Lý do: ", repr(e))
+                            output = {
+                                "type": data['type'],
+                                "username": name,
+                                "content": content,
+                                "status": False,
+                                "reason": "ErrorWhenSend",
+                                "error": repr(e)
+                            }
+                            ws.send(json.dumps(output))
+                    else:
+                        print("[S] Từ chối gửi tin ",name," (",ws,"): " , content , " | Lý do: WrongFormatContent")
                         output = {
-                            "type": data['type'],
-                            "username": name,
-                            "content": content,
-                            "status": False,
-                            "reason": "ErrorWhenSend",
-                            "error": repr(e)
-                        }
+                                "type": data['type'],
+                                "username": name,
+                                "content": content,
+                                "status": False,
+                                "reason":"WrongFormatContent"
+                            }
                         ws.send(json.dumps(output))
-                else:
-                    print("[S] Từ chối gửi tin ",name," (",ws,"): " , content , " | Lý do: WrongFormatContent")
-                    output = {
-                            "type": data['type'],
-                            "username": name,
-                            "content": content,
-                            "status": False,
-                            "reason":"WrongFormatContent"
-                        }
-                    ws.send(json.dumps(output))
 
             elif (data['type'] == "get"):
                 number = find(socks, 'socket', ws)
