@@ -10,7 +10,11 @@
 Ngoài ra còn có:
 - "**get**" ngoài cung cấp tin nhắn ra thì nó sẽ cung cấp cho Client cái Biệt danh của những người đã kết nối tới Server.
 - Để sử dụng các tính năng trên Server (trừ "**register**"), bạn sẽ phải Đăng ký cho mình một cái Biệt danh trước ("**register**"), hoặc là Server chỉ đưa cho bạn đúng mỗi cái nịt `status: false` cho bạn muốn làm gì thì làm.
-- Thông báo cho bạn nguyên nhân gây lỗi yêu cầu của bạn ("**reason**" và "**error**") 
+- Thông báo cho bạn nguyên nhân gây lỗi yêu cầu của bạn ("**reason**" và "**error**")
+- Log tại Console đã được phân rõ ràng
+- ...
+
+và nhiều tính năng mới mà cơ bản mình lười nên không ghi, với lại không nhớ mình đã update những gì
 
 #### Yêu cầu:
 - <a href="https://pypi.org/project/Flask/">Flask</a>
