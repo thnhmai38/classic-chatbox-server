@@ -10,52 +10,55 @@ app = Flask(__name__)
 sock = Sock(app)
 
 socks = []
+allsocks = []
 ping_delay = 5
 
-def disconnected(ws: Server):
-    number = find(socks, 'socket', ws)
-    if (number != None):
-        socks.remove(socks[number])
-        print("[<-] Đã rời khỏi Chatbox và ngắt kết nối Socket" , socks[number]['name'] , " (" , socks[number]['socket'] , ")")
-        timestamp = datetime.datetime.now()
+def set_interval(func, sec):
+    def func_wrapper():
+        set_interval(func, sec)
+        func()
+    t = threading.Timer(sec, func_wrapper)
+    t.start()
+    return t
+def ClientOfflineDetect():
+    leaveList = []
+    output = {
+        "type" : "ping",
+        "timeout" : ping_delay
+    }
+    for client in allsocks:
+        try:
+            client['socket'].send(json.dumps(output))
+        except:
+            if (client['name'] == None):
+                print("[<-] Đã ngắt kết nối Socket: " ,client['socket'])
+                allsocks.remove(client)
+            else:
+                socks.remove(client)
+                try: 
+                    client['socket'].close() 
+                except: pass
+                timestamp = datetime.datetime.now()
+                print("[<-] Đã rời khỏi Chatbox và ngắt kết nối Socket" , client['name'] , " (" , client['socket'] , ")")
+                leaveList.append({
+                    'name': client['name'],
+                    'timestamp': timestamp.strftime("%d/%m/%Y, %H:%M:%S")
+                })
+                allsocks.remove(client)
+
+    for leave in leaveList:
         rec = {
             "type": "receive",
             "datatype": "leave",
-            "name": socks[number]['name'],
-            "timestamp": timestamp.strftime("%d/%m/%Y, %H:%M:%S")
+            "name": leave['name'],
+            "timestamp": leave['timestamp']
         }   
         for client in socks:
             try: 
                 client['socket'].send(json.dumps(rec)) 
             except Exception as e: 
-                print("[=] Không gửi được thông tin rời khỏi Server của ", socks[number]['name'], " cho ", client['socket']," | Lý do: ", repr(e))
-    else:
-        print("[<-] Đã ngắt kết nối Socket: " ,ws)
-    try: 
-        ws.close() 
-    except:
-        pass
-def ping(ws: Server):
-    output = {
-        "type" : "ping",
-        "timeout" : ping_delay
-    }
-    try:
-        ws.send(json.dumps(output))
-        return True
-    except: 
-        disconnected(ws)
-        return False
-def loop(ws: Server, sec):
-    try:
-        if (ping(ws) == True):
-            def func_wrapper():
-                loop(ws, sec)
-            t = threading.Timer(sec, func_wrapper)
-            t.start()
-            return t
-    except:
-        disconnected(ws)
+                print("[=] Không gửi được thông tin rời khỏi Server của ", leave['name'], " cho ", client['socket']," | Lý do: ", repr(e))
+
 
 def get():
     file = open("data.json", encoding='utf_8')
@@ -97,7 +100,10 @@ print(" ")
 @sock.route('/')
 def connect(ws: Server):
     print("[->] Kết nối Socket mới: ", ws)
-    loop(ws, ping_delay)
+    allsocks.append({
+        'name': None,
+        'socket': ws
+    })
 
     while True:
         receive = ""
@@ -130,6 +136,7 @@ def connect(ws: Server):
                         if (find(socks, 'name', username) == None): # Không có ai sử dụng tên này
                             try:
                                 socks[number]['name'] = username
+                                allsocks[find(allsocks, 'socket', ws)] = socks[number]
     
                                 timestamp = datetime.datetime.now()
                                 out = {
@@ -200,6 +207,7 @@ def connect(ws: Server):
                                     "socket": ws
                                 }
                                 socks.append(reginfo)
+                                allsocks[find(allsocks, 'socket', ws)] = reginfo
 
                                 timestamp = datetime.datetime.now()
                                 out = {
@@ -387,4 +395,5 @@ def connect(ws: Server):
                 ws.send(json.dumps(output))
     # Về elif: https://www.freecodecamp.org/news/python-switch-statement-switch-case-example/
 
+set_interval(ClientOfflineDetect, ping_delay)
 app.run()
